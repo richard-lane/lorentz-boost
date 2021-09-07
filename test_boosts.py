@@ -7,6 +7,10 @@ K_MASS_GEV = 0.493677
 PI_MASS_GEV = 0.139570
 
 
+def test_beta():
+    assert boosts._velocity(5.0 / 3.0) == 0.8
+
+
 def test_no_boost():
     # Stationary D
     d_momentum = np.array([0.0, 0.0, 0.0, D_MASS_GEV])
