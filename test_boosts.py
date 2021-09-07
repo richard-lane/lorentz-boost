@@ -90,10 +90,7 @@ def test_boosts():
             [5.0, 1.0],
             [0.0, 2.0],
             [0.0, 3.0],
-            [
-                np.sqrt(25.0 + D_MASS_GEV ** 2),
-                np.sqrt(14.0 + D_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + D_MASS_GEV ** 2), np.sqrt(14.0 + D_MASS_GEV ** 2)],
         ]
     )
     k = np.array(
@@ -101,10 +98,7 @@ def test_boosts():
             [0.0, 1.0],
             [3.0, 3.0],
             [-4.0, -4.0],
-            [
-                np.sqrt(25.0 + K_MASS_GEV ** 2),
-                np.sqrt(26.0 + K_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + K_MASS_GEV ** 2), np.sqrt(26.0 + K_MASS_GEV ** 2)],
         ]
     )
 
@@ -127,10 +121,7 @@ def test_boosts_multiple_particles():
             [5.0, 1.0],
             [0.0, 2.0],
             [0.0, 3.0],
-            [
-                np.sqrt(25.0 + D_MASS_GEV ** 2),
-                np.sqrt(14.0 + D_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + D_MASS_GEV ** 2), np.sqrt(14.0 + D_MASS_GEV ** 2)],
         ]
     )
     k = np.array(
@@ -138,10 +129,7 @@ def test_boosts_multiple_particles():
             [0.0, 1.0],
             [3.0, 3.0],
             [-4.0, -4.0],
-            [
-                np.sqrt(25.0 + K_MASS_GEV ** 2),
-                np.sqrt(26.0 + K_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + K_MASS_GEV ** 2), np.sqrt(26.0 + K_MASS_GEV ** 2)],
         ]
     )
 
@@ -150,10 +138,7 @@ def test_boosts_multiple_particles():
             [0.0, 1.0],
             [3.0, 3.0],
             [-4.0, -4.0],
-            [
-                np.sqrt(25.0 + PI_MASS_GEV ** 2),
-                np.sqrt(26.0 + PI_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + PI_MASS_GEV ** 2), np.sqrt(26.0 + PI_MASS_GEV ** 2)],
         ]
     )
 
