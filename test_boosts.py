@@ -27,13 +27,21 @@ def test_mass():
 
 
 def test_masses():
-    energies = np.array([27.0, 28.0])
-    px = np.array([2.0, 2.0])
-    py = np.array([7.0, 7.0])
-    pz = np.array([26.0, 26.0])
+    energies = np.array([27.0, 28.0, 10.0, 15.0])
+    px = np.array([2.0, 2.0, 1.0, 2.0])
+    py = np.array([7.0, 7.0, -2.0, 0.0])
+    pz = np.array([26.0, 26.0, 3.0, 4.0])
 
     assert np.allclose(
-        boosts._masses(energies, px, py, pz), np.array([0.0, np.sqrt(55)])
+        boosts._masses(energies, px, py, pz),
+        np.array([0.0, np.sqrt(55), np.sqrt(86), np.sqrt(205)]),
+    )
+
+
+def test_multiply():
+    assert np.allclose(
+        boosts._multiply(np.array([1, 2]), np.array([[1, 2, 3], [4, 5, 6]])),
+        np.array([[1, 2, 3], [8, 10, 12]]),
     )
 
 
@@ -91,24 +99,6 @@ def test_general_boost():
     expected = np.array([-2.190947286, -3.381894571, -13.57284186, 14.16697618])
 
     assert np.allclose(expected, boosts.boost(k_4momentum, gamma, dirn), atol=0.01)
-
-
-def test_masses():
-    energies = np.array([10.0, 15.0])
-    px = np.array([1.0, 2.0])
-    py = np.array([-2.0, 0.0])
-    pz = np.array([3.0, 4.0])
-
-    masses = np.array([np.sqrt(86), np.sqrt(205)])
-
-    assert np.allclose(boosts._masses(energies, px, py, pz), masses)
-
-
-def test_multiply():
-    assert np.allclose(
-        boosts._multiply(np.array([1, 2]), np.array([[1, 2, 3], [4, 5, 6]])),
-        np.array([[1, 2, 3], [8, 10, 12]]),
-    )
 
 
 def test_boosts():
