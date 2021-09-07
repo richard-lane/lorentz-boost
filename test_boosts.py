@@ -11,6 +11,10 @@ def test_beta():
     assert boosts._velocity(5.0 / 3.0) == 0.8
 
 
+def test_magnitude():
+    assert boosts._magnitude(np.array([2.0, 7.0, 26.0])) == 27.0
+
+
 def test_no_boost():
     # Stationary D
     d_momentum = np.array([0.0, 0.0, 0.0, D_MASS_GEV])
