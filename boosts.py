@@ -5,19 +5,6 @@ Lorentz boosts
 import numpy as np
 
 
-def _to_inv_gev(time):
-    """
-    Convert from ps to GeV^-1
-
-    """
-    # Magic conversion factor from ps to inverse GeV is (3/1.97) * 10^12
-    return 3 * time * 10 ** 12 / 1.97
-
-
-def _to_ps(time):
-    return 1.97 * time / (3 * 10 ** 12)
-
-
 def _gamma(mass, energy):
     """
     Easiest way to calculate gamma, i reckon
