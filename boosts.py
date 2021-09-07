@@ -5,16 +5,6 @@ Lorentz boosts
 import numpy as np
 
 
-def _gamma(mass, energy):
-    """
-    Easiest way to calculate gamma, i reckon
-
-    Both in GeV
-
-    """
-    return energy / mass
-
-
 def _velocity(gamma):
     return np.sqrt(1 - (1 / (gamma ** 2)))
 

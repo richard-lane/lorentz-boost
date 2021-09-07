@@ -1,5 +1,6 @@
 import numpy as np
 import boosts
+import helpers
 
 D_MASS_GEV = 1.86484
 K_MASS_GEV = 0.493677
@@ -10,7 +11,7 @@ def test_no_boost():
     # Stationary D
     d_momentum = np.array([0.0, 0.0, 0.0, D_MASS_GEV])
 
-    gamma = boosts._gamma(D_MASS_GEV, d_momentum[3])
+    gamma = helpers.gamma(D_MASS_GEV, d_momentum[3])
     dirn = d_momentum[:3]
 
     # vector to boost
@@ -33,7 +34,7 @@ def test_x_boost():
     k_energy = np.sqrt(np.linalg.norm(k_3momentum) ** 2 + K_MASS_GEV ** 2)
     k_4momentum = np.array([*k_3momentum, k_energy])
 
-    gamma = boosts._gamma(D_MASS_GEV, d_energy)
+    gamma = helpers.gamma(D_MASS_GEV, d_energy)
     dirn = np.array([1.0, 0.0, 0.0])
 
     expected = np.array([-13.47280853, 3.0, -4.0, 14.37916154])
@@ -54,7 +55,7 @@ def test_general_boost():
     k_energy = np.sqrt(np.linalg.norm(k_3momentum) ** 2 + K_MASS_GEV ** 2)
     k_4momentum = np.array([*k_3momentum, k_energy])
 
-    gamma = boosts._gamma(D_MASS_GEV, d_energy)
+    gamma = helpers.gamma(D_MASS_GEV, d_energy)
     dirn = boosts.direction(d_3momentum)
 
     expected = np.array([-2.190947286, -3.381894571, -13.57284186, 14.16697618])
