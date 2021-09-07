@@ -1,16 +1,55 @@
 import numpy as np
 import boosts
+import helpers
 
 D_MASS_GEV = 1.86484
 K_MASS_GEV = 0.493677
 PI_MASS_GEV = 0.139570
 
 
+def test_beta():
+    assert boosts._velocity(5.0 / 3.0) == 0.8
+
+
+def test_magnitude():
+    assert boosts._magnitude(np.array([2.0, 7.0, 26.0])) == 27.0
+
+
+def test_direction():
+    assert np.allclose(
+        boosts.direction(np.array([2.0, 7.0, 26.0])),
+        np.array([2.0 / 27.0, 7.0 / 27.0, 26.0 / 27.0]),
+    )
+
+
+def test_mass():
+    assert boosts._masses(27.0, 2.0, 7.0, 26.0) == 0.0
+
+
+def test_masses():
+    energies = np.array([27.0, 28.0, 10.0, 15.0])
+    px = np.array([2.0, 2.0, 1.0, 2.0])
+    py = np.array([7.0, 7.0, -2.0, 0.0])
+    pz = np.array([26.0, 26.0, 3.0, 4.0])
+
+    assert np.allclose(
+        boosts._masses(energies, px, py, pz),
+        np.array([0.0, np.sqrt(55), np.sqrt(86), np.sqrt(205)]),
+    )
+
+
+def test_multiply():
+    assert np.allclose(
+        boosts._multiply(np.array([1, 2]), np.array([[1, 2, 3], [4, 5, 6]])),
+        np.array([[1, 2, 3], [8, 10, 12]]),
+    )
+
+
 def test_no_boost():
     # Stationary D
     d_momentum = np.array([0.0, 0.0, 0.0, D_MASS_GEV])
 
-    gamma = boosts._gamma(D_MASS_GEV, d_momentum[3])
+    gamma = helpers.gamma(D_MASS_GEV, d_momentum[3])
     dirn = d_momentum[:3]
 
     # vector to boost
@@ -33,7 +72,7 @@ def test_x_boost():
     k_energy = np.sqrt(np.linalg.norm(k_3momentum) ** 2 + K_MASS_GEV ** 2)
     k_4momentum = np.array([*k_3momentum, k_energy])
 
-    gamma = boosts._gamma(D_MASS_GEV, d_energy)
+    gamma = helpers.gamma(D_MASS_GEV, d_energy)
     dirn = np.array([1.0, 0.0, 0.0])
 
     expected = np.array([-13.47280853, 3.0, -4.0, 14.37916154])
@@ -54,30 +93,12 @@ def test_general_boost():
     k_energy = np.sqrt(np.linalg.norm(k_3momentum) ** 2 + K_MASS_GEV ** 2)
     k_4momentum = np.array([*k_3momentum, k_energy])
 
-    gamma = boosts._gamma(D_MASS_GEV, d_energy)
+    gamma = helpers.gamma(D_MASS_GEV, d_energy)
     dirn = boosts.direction(d_3momentum)
 
     expected = np.array([-2.190947286, -3.381894571, -13.57284186, 14.16697618])
 
     assert np.allclose(expected, boosts.boost(k_4momentum, gamma, dirn), atol=0.01)
-
-
-def test_masses():
-    energies = np.array([10.0, 15.0])
-    px = np.array([1.0, 2.0])
-    py = np.array([-2.0, 0.0])
-    pz = np.array([3.0, 4.0])
-
-    masses = np.array([np.sqrt(86), np.sqrt(205)])
-
-    assert np.allclose(boosts._masses(energies, px, py, pz), masses)
-
-
-def test_multiply():
-    assert np.allclose(
-        boosts._multiply(np.array([1, 2]), np.array([[1, 2, 3], [4, 5, 6]])),
-        np.array([[1, 2, 3], [8, 10, 12]]),
-    )
 
 
 def test_boosts():
@@ -90,10 +111,7 @@ def test_boosts():
             [5.0, 1.0],
             [0.0, 2.0],
             [0.0, 3.0],
-            [
-                np.sqrt(25.0 + D_MASS_GEV ** 2),
-                np.sqrt(14.0 + D_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + D_MASS_GEV ** 2), np.sqrt(14.0 + D_MASS_GEV ** 2)],
         ]
     )
     k = np.array(
@@ -101,10 +119,7 @@ def test_boosts():
             [0.0, 1.0],
             [3.0, 3.0],
             [-4.0, -4.0],
-            [
-                np.sqrt(25.0 + K_MASS_GEV ** 2),
-                np.sqrt(26.0 + K_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + K_MASS_GEV ** 2), np.sqrt(26.0 + K_MASS_GEV ** 2)],
         ]
     )
 
@@ -127,10 +142,7 @@ def test_boosts_multiple_particles():
             [5.0, 1.0],
             [0.0, 2.0],
             [0.0, 3.0],
-            [
-                np.sqrt(25.0 + D_MASS_GEV ** 2),
-                np.sqrt(14.0 + D_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + D_MASS_GEV ** 2), np.sqrt(14.0 + D_MASS_GEV ** 2)],
         ]
     )
     k = np.array(
@@ -138,10 +150,7 @@ def test_boosts_multiple_particles():
             [0.0, 1.0],
             [3.0, 3.0],
             [-4.0, -4.0],
-            [
-                np.sqrt(25.0 + K_MASS_GEV ** 2),
-                np.sqrt(26.0 + K_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + K_MASS_GEV ** 2), np.sqrt(26.0 + K_MASS_GEV ** 2)],
         ]
     )
 
@@ -150,10 +159,7 @@ def test_boosts_multiple_particles():
             [0.0, 1.0],
             [3.0, 3.0],
             [-4.0, -4.0],
-            [
-                np.sqrt(25.0 + PI_MASS_GEV ** 2),
-                np.sqrt(26.0 + PI_MASS_GEV ** 2),
-            ],
+            [np.sqrt(25.0 + PI_MASS_GEV ** 2), np.sqrt(26.0 + PI_MASS_GEV ** 2)],
         ]
     )
 
