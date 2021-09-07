@@ -22,6 +22,21 @@ def test_direction():
     )
 
 
+def test_mass():
+    assert boosts._masses(27.0, 2.0, 7.0, 26.0) == 0.0
+
+
+def test_masses():
+    energies = np.array([27.0, 28.0])
+    px = np.array([2.0, 2.0])
+    py = np.array([7.0, 7.0])
+    pz = np.array([26.0, 26.0])
+
+    assert np.allclose(
+        boosts._masses(energies, px, py, pz), np.array([0.0, np.sqrt(55)])
+    )
+
+
 def test_no_boost():
     # Stationary D
     d_momentum = np.array([0.0, 0.0, 0.0, D_MASS_GEV])
