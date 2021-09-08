@@ -29,7 +29,7 @@ jobs:
         black --check *.py
     - name: Test with pytest
       run: |
-        pytest --cov-report term test_boosts.py --cov=./ --cov-report=xml
+        pytest test_boosts.py --cov=./ --cov-report=xml
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
