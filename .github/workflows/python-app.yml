@@ -3,11 +3,7 @@
 
 name: Python application
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -26,10 +22,10 @@ jobs:
         pip install black pytest numpy pytest-cov
     - name: Lint with black
       run: |
-        black --check *.py
+        black --check lorentz-boost/**
     - name: Test with pytest
       run: |
-        pytest test_boosts.py --cov=./ --cov-report=xml
+        pytest --pyargs lorentz-boost --cov=./ --cov-report=xml
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
