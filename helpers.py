@@ -6,4 +6,3 @@ def gamma(mass, energy):
 
     """
     return energy / mass
-
