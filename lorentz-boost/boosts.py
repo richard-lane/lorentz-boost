@@ -1,67 +1,8 @@
-"""
-Lorentz boosts
-
-"""
+import utils
 import numpy as np
 
 
-def _velocity(gamma):
-    return np.sqrt(1 - (1 / (gamma ** 2)))
-
-
-def _magnitude(vector: np.ndarray):
-    return np.sqrt(np.sum(vector ** 2))
-
-
-def direction(vector: np.ndarray):
-    """
-    Return a unit vector parallel to the input - three dimensional
-
-    """
-    return vector / _magnitude(vector)
-
-
-def _masses(energies, px, py, pz):
-    """
-    Relativistic mass
-
-    """
-    return np.sqrt((energies ** 2) - (px ** 2) - (py ** 2) - (pz ** 2))
-
-
-def _multiply(array, matrix):
-    """
-    multiply each row of a matrix by each element of an array
-
-    e.g. [1, 2] * [[1, 2, 3], [4, 5, 6]] = [[1, 2, 3], [8, 10, 12]]
-
-    """
-    return array.reshape((-1,) + (1,) * (matrix.ndim - 1)) * matrix
-
-
-def boost(target, gamma, direction: np.ndarray):
-    """
-    Boost a 4-vector (original) in a direction
-
-    4-vector in GeV: (x, y, z, t)
-
-    """
-    assert len(target) == 4
-
-    # Work out v from gamma
-    v = _velocity(gamma)
-
-    new_energy = gamma * (target[3] - v * np.dot(direction, target[:3]))
-    new_p = (
-        target[:3]
-        + (gamma - 1) * np.dot(direction, target[:3]) * direction
-        - gamma * target[3] * v * direction
-    )
-
-    return [*new_p, new_energy]
-
-
-def boosts(*particles, target: np.ndarray):
+def boosts(*particles: np.ndarray, target: np.ndarray) -> tuple:
     """
     Boost some particles into the rest frame of targets
 
@@ -75,11 +16,8 @@ def boosts(*particles, target: np.ndarray):
     :returns: tuple of arrays of boosted particles
 
     """
-    # Number of target particles - i.e. number of boosts we need to perform
-    n = target.shape[1]
-
     # Work out masses of target particles
-    masses = _masses(target[3], *target[0:3])
+    masses = utils._masses(target[3], *target[0:3])
 
     # Find gamma for each target particle
     gammas = target[3] / masses
@@ -109,8 +47,8 @@ def boosts(*particles, target: np.ndarray):
         # Work out momenta
         momenta = (
             particle_3momenta
-            + _multiply((gammas - 1), _multiply(n_dot_p, directions))
-            - _multiply(particle_energies * betas * gammas, directions)
+            + utils._multiply((gammas - 1), utils._multiply(n_dot_p, directions))
+            - utils._multiply(particle_energies * betas * gammas, directions)
         )
         boosted_particle[0:3] = momenta.T
         boosted_particle[3] = energies
