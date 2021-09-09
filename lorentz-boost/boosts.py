@@ -1,5 +1,6 @@
 import utils
 import numpy as np
+from typing import Tuple
 
 
 def boosts(*particles: np.ndarray, target: np.ndarray) -> tuple:
@@ -56,3 +57,15 @@ def boosts(*particles: np.ndarray, target: np.ndarray) -> tuple:
         boosted_particles.append(boosted_particle)
 
     return tuple(boosted_particles)
+
+
+def boost_one_particle(particle, target) -> Tuple[float, float]:
+    """
+    Boost a single particle into the rest frame of a target particle
+
+    :param particle: 4-vector (x, y, z, t) of particle to boost
+    :param target: 4-vector (x, y, z, t) of particle whose rest frame we will boost to
+    :return: 4-vector (x, y, x, t) of particle after boosting
+
+    """
+    pass
