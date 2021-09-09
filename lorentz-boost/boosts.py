@@ -3,20 +3,24 @@ import numpy as np
 from typing import Tuple
 
 
-def boosts(*particles: np.ndarray, target: np.ndarray) -> tuple:
+def boosts(particles: np.ndarray, target: np.ndarray) -> np.ndarray:
     """
-    Boost some particles into the rest frame of targets
+    Boost multiple particles into the rest frame of different particle(s).
 
-    Each particle in particles should be an array of [[px1, px2,...], [py1, py2, ...], [py1, pz2, ...], [E1, E2, ...]]
+    Can either boost all particles into the rest frame of one target particle or many targets.
 
-    target should be in the same format
+    `particles` should be a numpy array with shape (4, N), representing N 4-vectors.
+    This should be [x, y, z, t], where each element is a length-N array.
+    `target` can either be a shape (4, N) array representing many target particles whose frames we will boost into, or one
+    target particle [x, y, z, t] whose frame too boost all particles into.
 
-    :param *particles: parameter pack of array of particles to boost
-    :param target: array of particles to boost into. Should all be the same particle, i.e. a D meson
-    :param mass: mass of the target particles
-    :returns: tuple of arrays of boosted particles
+    :param particles: shape (4, N) array of particles to boost- (x, y, z, t)
+    :param target: either one particle (x, y, z, t) whose frame we will boost all particles to, or a shape (4, N) array of target particles whose frames we will boost into.
+    :return: shape (4, N) array of particles after boosting
 
     """
+    # TODO: figure out whether target is one particle or several
+
     # Work out masses of target particles
     masses = utils._masses(target[3], *target[0:3])
 
@@ -59,7 +63,7 @@ def boosts(*particles: np.ndarray, target: np.ndarray) -> tuple:
     return tuple(boosted_particles)
 
 
-def boost_one_particle(particle, target) -> Tuple[float, float]:
+def boost_one_particle(particle, target) -> Tuple[float, float, float, float]:
     """
     Boost a single particle into the rest frame of a target particle
 
