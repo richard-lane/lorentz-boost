@@ -37,7 +37,7 @@ def test_boosts():
             [14.37916154, 14.16697618],
         ]
     )
-    (calculated,) = boosts.boosts(k, target=d)
+    calculated = boosts.boosts(k, target=d)
 
     assert np.allclose(calculated, expected, atol=0.01)
 
@@ -80,7 +80,8 @@ def test_boosts_multiple_particles():
 
     # Can only be bothered to test the pion energy
     expected_pi_energy = 14.11780251
-    boosted_k, boosted_pi = boosts.boosts(k, pi, target=d)
+    boosted_k = boosts.boosts(k, target=d)
+    boosted_pi = boosts.boosts(pi, target=d)
 
     assert np.allclose(boosted_k, expected_k, atol=0.01)
     assert np.allclose(boosted_pi[-1, 1], expected_pi_energy, atol=0.01)

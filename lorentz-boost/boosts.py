@@ -33,34 +33,28 @@ def boosts(particles: np.ndarray, target: np.ndarray) -> np.ndarray:
         target[0:3] / np.sqrt(target[0] ** 2 + target[1] ** 2 + target[2] ** 2)
     ).T
 
-    boosted_particles = []
+    particle_energies = particles[3]
+    particle_3momenta = particles[0:3].T
 
-    # For each particle:
-    for particle in particles:
-        particle_energies = particle[3]
-        particle_3momenta = particle[0:3].T
+    # Init empty array for solutions
+    boosted_particle = np.zeros(target.shape)
 
-        # Init empty array for solutions
-        boosted_particle = np.zeros(target.shape)
+    # Work out energies
+    n_dot_p = (directions * particle_3momenta).sum(
+        1
+    )  # This is the dot product directions . 3-momenta
+    energies = gammas * (particle_energies - betas * n_dot_p)
 
-        # Work out energies
-        n_dot_p = (directions * particle_3momenta).sum(
-            1
-        )  # This is the dot product directions . 3-momenta
-        energies = gammas * (particle_energies - betas * n_dot_p)
+    # Work out momenta
+    momenta = (
+        particle_3momenta
+        + utils._multiply((gammas - 1), utils._multiply(n_dot_p, directions))
+        - utils._multiply(particle_energies * betas * gammas, directions)
+    )
+    boosted_particle[0:3] = momenta.T
+    boosted_particle[3] = energies
 
-        # Work out momenta
-        momenta = (
-            particle_3momenta
-            + utils._multiply((gammas - 1), utils._multiply(n_dot_p, directions))
-            - utils._multiply(particle_energies * betas * gammas, directions)
-        )
-        boosted_particle[0:3] = momenta.T
-        boosted_particle[3] = energies
-
-        boosted_particles.append(boosted_particle)
-
-    return tuple(boosted_particles)
+    return boosted_particle
 
 
 def boost_one_particle(particle, target) -> Tuple[float, float, float, float]:
