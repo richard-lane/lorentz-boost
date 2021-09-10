@@ -1,6 +1,5 @@
 import numpy as np
-import utils
-import boosts
+from .. import boosts
 
 D_MASS_GEV = 1.86484
 K_MASS_GEV = 0.493677

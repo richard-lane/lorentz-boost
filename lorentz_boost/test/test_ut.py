@@ -1,6 +1,6 @@
 import numpy as np
-import utils
-import boosts
+from .. import utils
+from .. import boosts
 import pytest
 
 D_MASS_GEV = 1.86484
