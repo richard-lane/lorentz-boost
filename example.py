@@ -18,6 +18,11 @@ def angle(x1, y1, z1, x2, y2, z2):
     return np.arccos(dot)
 
 
+def z_angle(x, y, z):
+    norm = np.sqrt(x * x + y * y + z * z)
+    return np.arccos(z / norm)
+
+
 # Download some open data from CMS
 dataframe = pd.read_csv("https://opendata.cern.ch/record/5203/files/Jpsimumu.csv")
 
@@ -38,12 +43,11 @@ jpsi_px = px1 + px2
 jpsi_py = py1 + py2
 jpsi_pz = pz1 + pz2
 
-angles = angle(px1, py1, pz1, px2, py2, pz2)
-plt.hist(angles, bins=100)
+angles1 = z_angle(px1, py1, pz1)
+angles2 = z_angle(px2, py2, pz2)
+plt.hist(angles1, bins=100)
+plt.hist(angles2, bins=100)
 plt.show()
-
-# Find angle between muon 1 and z-axis before boost
-# Find angle between muon 1 and z-axis after boost
 
 # Plot before
 # Plot after
