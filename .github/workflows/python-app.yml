@@ -22,13 +22,13 @@ jobs:
         pip install black pytest numpy pytest-cov
     - name: Lint with black
       run: |
-        black --check lorentz-boost/**
+        black --check lorentz_boost/**
     - name: Unit Test
       run: |
-        pytest lorentz-boost/test/test_ut.py --cov=./ --cov-report=xml:ut.xml
+        pytest lorentz_boost/test/test_ut.py --cov=./ --cov-report=xml:ut.xml
     - name: Integration Test
       run: |
-        pytest lorentz-boost/test/test_boosts.py --cov=./ --cov-report=xml:it.xml
+        pytest lorentz_boost/test/test_boosts.py --cov=./ --cov-report=xml:it.xml
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
