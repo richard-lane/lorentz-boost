@@ -10,7 +10,7 @@ PI_MASS_GEV = 0.139570
 def test_boost_one_particle():
     target = np.array([1.0, 2.0, 3.0, np.sqrt(14.0 + D_MASS_GEV ** 2)])
     source = (1.0, 3.0, -4.0, np.sqrt(26.0 + K_MASS_GEV ** 2))
-    expected = np.array((-2.190947286, -3.381894571, -13.57284186, 14.16697618))
+    expected = (-2.190947286, -3.381894571, -13.57284186, 14.16697618)
 
     assert np.allclose(boosts.boost_one_particle(source, target), expected, atol=0.01)
 

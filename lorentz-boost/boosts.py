@@ -105,4 +105,18 @@ def boost_one_particle(particle, target) -> Tuple[float, float, float, float]:
     :return: 4-vector (x, y, x, t) of particle after boosting
 
     """
-    pass
+    # Convert particle to 2d numpy array
+    particle_array = np.array(
+        [[particle[0]], [particle[1]], [particle[2]], [particle[3]]]
+    )
+
+    # Pass to multiple particle boost fcn
+    boosted_particle = boosts(particle_array, target)
+
+    # Convert to tuple
+    return (
+        boosted_particle[0][0],
+        boosted_particle[1][0],
+        boosted_particle[2][0],
+        boosted_particle[3][0],
+    )
