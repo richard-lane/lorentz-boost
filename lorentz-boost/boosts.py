@@ -3,6 +3,37 @@ import numpy as np
 from typing import Tuple
 
 
+def _to_arrays(particle, count: int):
+    """
+    I want to deal with arrays of target particles
+
+    This fcn converts a particle to an array of (the same) particles
+    or if an array is passed in just returns it
+
+    :param particle: either 1 particle or a numpy array of particles
+    :param count: how many boosts we're dealing with
+    :return: an array of particles to boost to
+    :raises ValueError: if bad stuff is passed in
+
+    """
+    if isinstance(particle, np.ndarray) and particle.shape[0] == 4:
+        # Multiple particles provided
+        return particle
+    elif len(particle) == 4:
+        # One particle
+        out = np.zeros((4, count))
+        out[0] += particle[0]
+        out[1] += particle[1]
+        out[2] += particle[2]
+        out[3] += particle[3]
+
+        return out
+
+    raise ValueError(
+        f"target shape invalid: should either be a length-4 iterable [x, y, z, t] or a shape (4, N) array\nGot {type(particle)}"
+    )
+
+
 def boosts(particles: np.ndarray, target: np.ndarray) -> np.ndarray:
     """
     Boost multiple particles into the rest frame of different particle(s).
