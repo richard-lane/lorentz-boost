@@ -1,10 +1,47 @@
 import numpy as np
 import utils
 import boosts
+import pytest
 
 D_MASS_GEV = 1.86484
 K_MASS_GEV = 0.493677
 PI_MASS_GEV = 0.139570
+
+
+def test_array_to_array():
+    N = 10
+
+    # oOoOo random numbers in a unit test OoOooo
+    target = np.random.random((4, N))
+
+    assert np.allclose(target, boosts._to_arrays(target, N))
+
+
+def test_particle_to_array():
+    N = 3
+
+    target = [1, 2, 3, 4]
+    expected = np.array([[1, 1, 1], [2, 2, 2], [3, 3, 3], [4, 4, 4]])
+
+    assert np.allclose(expected, boosts._to_arrays(target, N))
+
+    target = np.array([1, 2, 3, 4])
+    assert np.allclose(expected, boosts._to_arrays(target, N))
+
+
+def test_to_array_bad_shape():
+    N = 3
+    with pytest.raises(ValueError):
+        boosts._to_arrays([1, 2, 3], N)
+
+    with pytest.raises(ValueError):
+        boosts._to_arrays([1, 2, 3, 4, 5], N)
+
+    with pytest.raises(ValueError):
+        boosts._to_arrays(np.random.random((3, N)), N)
+
+    with pytest.raises(ValueError):
+        boosts._to_arrays(np.random.random((5, N)), N)
 
 
 def test_beta():
