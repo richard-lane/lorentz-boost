@@ -16,9 +16,14 @@ def _to_arrays(particle, count: int):
     :raises ValueError: if bad stuff is passed in
 
     """
-    if isinstance(particle, np.ndarray) and particle.shape[0] == 4:
+    if (
+        isinstance(particle, np.ndarray)
+        and len(particle.shape) == 2
+        and particle.shape[0] == 4
+    ):
         # Multiple particles provided
         return particle
+
     elif len(particle) == 4:
         # One particle
         out = np.zeros((4, count))
@@ -50,25 +55,28 @@ def boosts(particles: np.ndarray, target: np.ndarray) -> np.ndarray:
     :return: shape (4, N) array of particles after boosting
 
     """
-    # TODO: figure out whether target is one particle or several
+    n_particles = len(particles[0])
+
+    # Create a 4xN numpy array of target particles to boost to
+    targets = _to_arrays(target, n_particles)
 
     # Work out masses of target particles
-    masses = utils._masses(target[3], *target[0:3])
+    masses = utils._masses(targets[3], *targets[0:3])
 
     # Find gamma for each target particle
-    gammas = target[3] / masses
+    gammas = targets[3] / masses
     betas = np.sqrt(1 - 1 / gammas ** 2)
 
     # Find direction for each target particle
     directions = (
-        target[0:3] / np.sqrt(target[0] ** 2 + target[1] ** 2 + target[2] ** 2)
+        targets[0:3] / np.sqrt(targets[0] ** 2 + targets[1] ** 2 + targets[2] ** 2)
     ).T
 
     particle_energies = particles[3]
     particle_3momenta = particles[0:3].T
 
     # Init empty array for solutions
-    boosted_particle = np.zeros(target.shape)
+    boosted_particle = np.zeros(targets.shape)
 
     # Work out energies
     n_dot_p = (directions * particle_3momenta).sum(

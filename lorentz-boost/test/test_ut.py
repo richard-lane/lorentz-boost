@@ -25,6 +25,9 @@ def test_particle_to_array():
 
     assert np.allclose(expected, boosts._to_arrays(target, N))
 
+    target = np.array([1, 2, 3, 4])
+    assert np.allclose(expected, boosts._to_arrays(target, N))
+
 
 def test_to_array_bad_shape():
     N = 3
