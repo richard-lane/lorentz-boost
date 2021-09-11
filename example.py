@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 
+import phasespace
+
 from lorentz_boost import boosts
 from lorentz_boost import utils
 import pandas as pd
@@ -25,9 +27,48 @@ def z_angle(x, y, z):
 
 
 # Generate non boosted particle with phasespace
+num_evts = 1000000
+
+B0_MASS = 5279.58
+PION_MASS = 139.57018
+KAON_MASS = 493.677
+
+target_4vector = np.zeros((4, num_evts))
+target_4vector[2] += 10000 * np.random.random(num_evts)
+target_4vector[3] = np.sqrt(
+    target_4vector[0] ** 2
+    + target_4vector[1] ** 2
+    + target_4vector[2] ** 2
+    + B0_MASS ** 2
+)
+
+w, particles = phasespace.nbody_decay(B0_MASS, [PION_MASS, KAON_MASS]).generate(
+    n_events=num_evts
+)
+
 # Generate boosted particle with phasespace
+boosted_w, boosted_particles = phasespace.nbody_decay(
+    B0_MASS, [PION_MASS, KAON_MASS]
+).generate(boost_to=target_4vector.T, n_events=num_evts)
+
 # Boost with my thing
-# Plot z angle
+my_boosted = boosts.boosts(particles["p_0"].numpy().T, target_4vector)
+
+# Plot pion z angle
+kw = {"bins": np.linspace(0.0, 1.0), "histtype": "step", "density": True}
+plt.hist(
+    np.cos(z_angle(*particles["p_0"].numpy().T[0:3])), **kw, weights=w, label="Phsp lab"
+)
+plt.hist(
+    np.cos(z_angle(*boosted_particles["p_0"].numpy().T[0:3])),
+    **kw,
+    weights=boosted_w,
+    label="Phsp boosted"
+)
+plt.hist(np.cos(z_angle(*my_boosted[0:3])), **kw, weights=w, label="My boosted")
+
+plt.legend()
+plt.show()
 
 assert False
 
